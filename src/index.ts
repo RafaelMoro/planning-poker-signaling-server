@@ -17,6 +17,10 @@ const io = new Server(httpServer, {
 io.on('connection', (socket) => {
   console.log('A user connected')
 
+  socket.on("join-room", () => {
+    console.log("user joined to the room");
+  })
+
   socket.on('disconnect', () => {
     console.log('A user disconnected')
   })
