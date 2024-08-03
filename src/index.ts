@@ -3,6 +3,8 @@ import http from 'node:http';
 import cors from 'cors'
 import { Server } from 'socket.io';
 
+import { roomHandler } from './room';
+
 const port = 8080
 const app = express()
 app.use(cors())
@@ -16,10 +18,7 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
   console.log('A user connected')
-
-  socket.on("join-room", () => {
-    console.log("user joined to the room");
-  })
+  roomHandler(socket)
 
   socket.on('disconnect', () => {
     console.log('A user disconnected')
