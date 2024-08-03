@@ -8,8 +8,8 @@ export const roomHandler = (socket: Socket) => {
     socket.emit(ROOM_CREATED_EVENT, { roomId });
     console.log("user created a room");
   }
-  const joinRoom = () => {
-    console.log("user joined to the room");
+  const joinRoom = ({ roomId }: { roomId: string }) => {
+    console.log(`user joined to the room ${roomId}`);
   }
 
   socket.on(CREATE_ROOM_EVENT, createRoom);
