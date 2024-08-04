@@ -1,9 +1,10 @@
 import { Socket } from "socket.io";
-import crypto from "crypto";
+import { createRoom as createRoomService } from "./rooms.service";
 import { CREATE_ROOM_EVENT, GENERAL_MESSAGES_EVENT, JOIN_ROOM_EVENT, ROOM_CREATED_EVENT } from "../constants";
 
 interface CreateRoomPayload {
-  user: string;
+  userName: string;
+  roomName: string;
 }
 
 interface User {
@@ -19,16 +20,11 @@ interface Room {
 export const roomHandler = (socket: Socket) => {
   const rooms: Room[] = [];
 
-  const createRoom = ({ user }: CreateRoomPayload) => {
-    const roomId = crypto.randomUUID();
-    rooms.push({
-      roomId,
-      users: [{ userName: user, message: '' }]
-    })
-    socket.emit(ROOM_CREATED_EVENT, { roomId, user });
-    console.log(rooms);
-    rooms[0].users.forEach((user) => console.log(user.userName));
-    console.log(`User ${user} created a room`);
+  const createRoom = async ({ userName, roomName }: CreateRoomPayload) => {
+    const roomId = '123';
+    await createRoomService({ roomName, userName });
+    socket.emit(ROOM_CREATED_EVENT, { roomId, userName });
+    console.log(`User ${userName} created a room`);
   }
 
   const joinRoom = async ({ roomId, userName }: { roomId: string, userName: string }) => {
@@ -49,13 +45,12 @@ export const roomHandler = (socket: Socket) => {
     console.log(`user ${userName} joined to the room ${roomId}`);
   }
 
-  const handleRoom = ({ user, message }: { user?: string, message?: string }) => {
-    // Modify message of the user
-
-  }
-  for (const room of rooms) {
-    socket.on(room.roomId, handleRoom)
-  }
+  // const handleRoom = ({ user, message }: { user?: string, message?: string }) => {
+  //   // something
+  // }
+  // for (const room of rooms) {
+  //   socket.on(room.roomId, handleRoom)
+  // }
 
   socket.on(CREATE_ROOM_EVENT, createRoom);
   socket.on(JOIN_ROOM_EVENT, joinRoom);
