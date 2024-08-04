@@ -1,10 +1,9 @@
 import { Socket } from "socket.io";
-import { createRoom as createRoomService } from "./rooms.service";
-import { CREATE_ROOM_EVENT, GENERAL_MESSAGES_EVENT, JOIN_ROOM_EVENT, ROOM_CREATED_EVENT } from "../constants";
+import crypto from 'crypto';
+import { CREATE_ROOM_EVENT, JOIN_ROOM_EVENT, ROOM_CREATED_EVENT } from "../constants";
 
 interface CreateRoomPayload {
   userName: string;
-  roomName: string;
 }
 
 interface User {
@@ -12,46 +11,24 @@ interface User {
   message: string;
 }
 
-interface Room {
-  roomId: string;
-  users: User[];
-}
-
 export const roomHandler = (socket: Socket) => {
-  const rooms: Room[] = [];
-
-  const createRoom = async ({ userName, roomName }: CreateRoomPayload) => {
-    const roomId = '123';
-    await createRoomService({ roomName, userName });
-    socket.emit(ROOM_CREATED_EVENT, { roomId, userName });
+  const createRoom = async ({ userName }: CreateRoomPayload) => {
+    const roomId = '123-456';
+    const newUser: User = { userName, message: '' };
+    socket.emit(ROOM_CREATED_EVENT, { roomId, newUser });
     console.log(`User ${userName} created a room`);
   }
 
-  const joinRoom = async ({ roomId, userName }: { roomId: string, userName: string }) => {
-    const roomFound = rooms.find((room) => room.roomId === roomId);
-    if (!roomFound) {
-      console.log(`Room ${roomId} does not exist`);
-      socket.emit(GENERAL_MESSAGES_EVENT, { message: `Room ${roomId} does not exist` });
-      return;
-    }
-    const newUser: User = { userName, message: '' };
-    rooms.forEach((room) => {
-      if (room.roomId === roomId) {
-        room.users.push(newUser);
-      }
-      return room
-    })
-    rooms[0].users.forEach((user) => console.log(user.userName));
-    console.log(`user ${userName} joined to the room ${roomId}`);
+  const joinRoom = async ({ roomId, newUser }: { roomId: string, newUser: User }) => {
+    socket.emit(ROOM_CREATED_EVENT, { roomId, newUser });
   }
-
-  // const handleRoom = ({ user, message }: { user?: string, message?: string }) => {
-  //   // something
-  // }
-  // for (const room of rooms) {
-  //   socket.on(room.roomId, handleRoom)
-  // }
 
   socket.on(CREATE_ROOM_EVENT, createRoom);
   socket.on(JOIN_ROOM_EVENT, joinRoom);
+  socket.on('123-456', ({ user }: { user: User }) => {
+    console.log(`User ${user.userName}`)
+    console.log(`Message: ${user.message}`)
+    // socket.
+  })
+  // socket.on(ROOM_CREATED_EVENT, handleRoom);
 }
