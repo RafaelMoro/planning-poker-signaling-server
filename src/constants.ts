@@ -4,5 +4,6 @@ export const JOIN_ROOM_EVENT = 'join-room';
 export const GENERAL_MESSAGES_EVENT = 'general-messages';
 export const SEND_MESSAGE_EVENT = 'send-message';
 export const RECEIVE_MESSAGE_EVENT = 'receive-message';
+export const GET_USERS_ROOM = 'get-users-room';
 
 export const MESSAGES_EVENT = 'messages'
