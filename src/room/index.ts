@@ -1,6 +1,5 @@
 import { Socket } from "socket.io";
-import crypto from 'crypto';
-import { CREATE_ROOM_EVENT, JOIN_ROOM_EVENT, ROOM_CREATED_EVENT } from "../constants";
+import { CREATE_ROOM_EVENT, JOIN_ROOM_EVENT, RECEIVE_MESSAGE_EVENT, ROOM_CREATED_EVENT, SEND_MESSAGE_EVENT } from "../constants";
 
 interface CreateRoomPayload {
   userName: string;
@@ -23,12 +22,16 @@ export const roomHandler = (socket: Socket) => {
     socket.emit(ROOM_CREATED_EVENT, { roomId, newUser });
   }
 
+  const handleSendMessage = ({message}: { message: string }) => {
+    socket.emit(RECEIVE_MESSAGE_EVENT, { message });
+  }
+
   socket.on(CREATE_ROOM_EVENT, createRoom);
   socket.on(JOIN_ROOM_EVENT, joinRoom);
-  socket.on('123-456', ({ user }: { user: User }) => {
-    console.log(`User ${user.userName}`)
-    console.log(`Message: ${user.message}`)
+  socket.on('123-456-send', ({ user }: { user: User }) => {
+    socket.emit('123-456-receive', { user });
     // socket.
   })
+  socket.on(SEND_MESSAGE_EVENT, handleSendMessage)
   // socket.on(ROOM_CREATED_EVENT, handleRoom);
 }
