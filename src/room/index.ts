@@ -35,7 +35,9 @@ export const roomHandler = (socket: Socket) => {
   })
   socket.on(SEND_MESSAGE_EVENT, handleSendMessage)
   socket.on('salute', (salute: string) => {
-    socket.emit(MESSAGES_EVENT, salute)
+    console.log('new message', salute)
+    // Necesitaba broadcast para enviar mensajes a todos los usuarios
+    socket.broadcast.emit(MESSAGES_EVENT, salute)
   })
   // socket.on(ROOM_CREATED_EVENT, handleRoom);
 }
