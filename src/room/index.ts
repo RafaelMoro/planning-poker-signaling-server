@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { CREATE_ROOM_EVENT, JOIN_ROOM_EVENT, RECEIVE_MESSAGE_EVENT, ROOM_CREATED_EVENT, SEND_MESSAGE_EVENT } from "../constants";
+import { CREATE_ROOM_EVENT, JOIN_ROOM_EVENT, MESSAGES_EVENT, RECEIVE_MESSAGE_EVENT, ROOM_CREATED_EVENT, SEND_MESSAGE_EVENT } from "../constants";
 
 interface CreateRoomPayload {
   userName: string;
@@ -34,5 +34,8 @@ export const roomHandler = (socket: Socket) => {
     // socket.
   })
   socket.on(SEND_MESSAGE_EVENT, handleSendMessage)
+  socket.on('salute', (salute: string) => {
+    socket.emit(MESSAGES_EVENT, salute)
+  })
   // socket.on(ROOM_CREATED_EVENT, handleRoom);
 }
