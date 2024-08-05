@@ -6,4 +6,3 @@ export const SEND_MESSAGE_EVENT = 'send-message';
 export const RECEIVE_MESSAGE_EVENT = 'receive-message';
 
 export const MESSAGES_EVENT = 'messages'
-export const REGISTER_USER_EVENT = 'register-user'
