@@ -28,10 +28,8 @@ export const roomHandler = (socket: Socket) => {
     socket.in(roomId).emit(roomId, { newUser });
   }
 
-  const handleGetUsersRoom = async ({ roomId, users }: { roomId: string, users: User[] }) => {
-    console.log('roomId', roomId);
-    console.log('users', users);
-    socket.to(roomId).emit(USERS_EVENT, { users });
+  const handleGetUsersRoom = async ({ roomId, allUsers }: { roomId: string, allUsers: User[] }) => {
+    socket.to(roomId).emit(USERS_EVENT, { allUsers });
   }
 
   socket.on(CREATE_ROOM_EVENT, createRoom);
