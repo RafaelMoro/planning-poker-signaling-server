@@ -22,8 +22,9 @@ export const roomHandler = (socket: Socket) => {
     socket.emit(ROOM_CREATED_EVENT, { roomId, newUser });
   }
 
-  const handleSendMessage = ({message}: { message: string }) => {
-    socket.emit(RECEIVE_MESSAGE_EVENT, { message });
+  const handleSendMessage = ({ user, message }: { user: string, message: string }) => {
+    console.log({ user, message})
+    socket.emit(RECEIVE_MESSAGE_EVENT, { user, message });
   }
 
   socket.on(CREATE_ROOM_EVENT, createRoom);
