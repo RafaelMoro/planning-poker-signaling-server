@@ -9,3 +9,5 @@ export const RECEIVE_MESSAGE_EVENT = 'receive-message';
 export const GET_USERS_ROOM = 'get-users-room';
 
 export const MESSAGES_EVENT = 'messages'
+
+export type PurposesTypes = 'join-room' | 'create-room' | 'send-message'

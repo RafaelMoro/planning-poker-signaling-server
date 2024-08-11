@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import crypto from "crypto";
-import { CREATE_ROOM_EVENT, GET_USERS_ROOM, JOIN_ROOM_EVENT, MESSAGES_EVENT, ROOM_CREATED_EVENT, USERS_EVENT } from "../constants";
+import { CREATE_ROOM_EVENT, GET_USERS_ROOM, JOIN_ROOM_EVENT, MESSAGES_EVENT, PurposesTypes, ROOM_CREATED_EVENT, USERS_EVENT } from "../constants";
 
 interface CreateRoomPayload {
   userName: string;
@@ -9,6 +9,7 @@ interface CreateRoomPayload {
 interface User {
   userName: string;
   message: string;
+  purpose: PurposesTypes;
 }
 
 export const roomHandler = (socket: Socket) => {
@@ -16,14 +17,14 @@ export const roomHandler = (socket: Socket) => {
     (socket as any).userName = userName;
     const roomId = crypto.randomUUID();
     socket.join(roomId);
-    const newUser: User = { userName, message: `User ${userName} created the room` };
+    const newUser: User = { userName, message: '', purpose: 'create-room' };
     socket.emit(ROOM_CREATED_EVENT, { roomId, newUser });
     console.log(`User ${userName} created a room`);
   }
 
   const joinRoom = async ({ roomId, userName }: { roomId: string, userName: string }) => {
     (socket as any).userName = userName;
-    const newUser: User = { userName, message: `User ${userName} joined the room` };
+    const newUser: User = { userName, message: '', purpose: 'join-room' };
     socket.join(roomId);
     socket.in(roomId).emit(roomId, { newUser });
   }
