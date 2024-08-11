@@ -1,11 +1,13 @@
 import express from 'express';
 import http from 'node:http';
 import cors from 'cors'
+import * as dotenv from 'dotenv';
 import { Server } from 'socket.io';
 
 import { roomHandler } from './room';
 
-const port = 8080
+dotenv.config();
+const PORT = process.env.PORT || 8080;
 const app = express()
 app.use(cors())
 const httpServer = http.createServer(app)
@@ -25,6 +27,6 @@ io.on('connection', (socket) => {
   })
 })
 
-httpServer.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+httpServer.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`)
 })
