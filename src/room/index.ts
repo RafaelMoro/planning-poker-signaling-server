@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import crypto from "crypto";
-import { CREATE_ROOM_EVENT, GET_USERS_ROOM, JOIN_ROOM_EVENT, MESSAGES_EVENT, PurposesTypes, ROOM_CREATED_EVENT, USERS_EVENT } from "../constants";
+import { CREATE_ROOM_EVENT, GET_USERS_ROOM, JOIN_ROOM_EVENT, MESSAGES_EVENT, PurposesTypes, ROOM_CREATED_EVENT, SEND_MESSAGE_EVENT, USERS_EVENT } from "../constants";
 
 interface CreateRoomPayload {
   userName: string;
@@ -33,9 +33,14 @@ export const roomHandler = (socket: Socket) => {
     socket.to(roomId).emit(USERS_EVENT, { allUsers });
   }
 
+  const handleSendMessage = async ({ roomId, userName}: { roomId: string, userName: User }) => {
+    socket.to(roomId).emit(roomId, { newUser: userName });
+  }
+
   socket.on(CREATE_ROOM_EVENT, createRoom);
   socket.on(JOIN_ROOM_EVENT, joinRoom);
   socket.on(GET_USERS_ROOM, handleGetUsersRoom);
+  socket.on(SEND_MESSAGE_EVENT, handleSendMessage)
   socket.on('salute', (salute: string) => {
     console.log('new message', salute)
     // Necesitaba broadcast para enviar mensajes a todos los usuarios
