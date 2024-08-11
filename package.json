@@ -10,7 +10,7 @@
     "watch": "pnpm prebuild && tsc -w",
     "prestart": "pnpm build",
     "start": "concurrently --kill-others \"pnpm watch\" \"nodemon .\"",
-    "prod": "pnpm prestart && node ."
+    "prod": "node ."
   },
   "keywords": [],
   "author": "",
